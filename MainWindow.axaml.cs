@@ -1,42 +1,44 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
+using Avalonia.Interactivity;
+using Newtonsoft.Json;
 using System.Net.Http;
-using System.Threading.Tasks;
 
-namespace WeatherApp
+namespace AvaloniaApplication1
 {
     public partial class MainWindow : Window
     {
-        private const string API_KEY = "55addf5d7930c9dc259c27d61d951539";
-        private const string CITY = "Rajcza";
-        private TextBlock _weatherTextBlock;
-
         public MainWindow()
         {
             InitializeComponent();
-            this.AttachDevTools();
-            _weatherTextBlock = this.FindControl<TextBlock>("WeatherTextBlock");
-            GetWeatherData();
         }
-
-        private void InitializeComponent()
+        private async void GetWeatherButton_Click(object sender, RoutedEventArgs e)
         {
-            AvaloniaXamlLoader.Load(this);
-        }
+            string apiKey = "c7d93130a8bb0fa9d8b4401cb61250a9"; 
+            string city = "Warsaw"; 
 
-        private async void GetWeatherData()
-        {
-            string url = $"http://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={API_KEY}";
+            string apiUrl = $"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={apiKey}&units=metric";
+            var button = (Button)sender;
             using (HttpClient client = new HttpClient())
             {
-                HttpResponseMessage response = await client.GetAsync(url);
-                if (response.IsSuccessStatusCode)
+                try
                 {
-                    string data = await response.Content.ReadAsStringAsync();
-                    _weatherTextBlock.Text = data;
+                    HttpResponseMessage response = await client.GetAsync(apiUrl);
+                    response.EnsureSuccessStatusCode();
+                    string responseBody = await response.Content.ReadAsStringAsync();
+
+                    dynamic weatherData = JsonConvert.DeserializeObject(responseBody);
+                    string weatherDescription = weatherData.weather[0].description;
+                    double temperature = weatherData.main.temp;                   
+                    string weatherInfo = $"Pogoda w {city}: {weatherDescription}, temperatura: {temperature}°C";
+                    
+                    button.Content = weatherInfo;
+                }
+                catch (HttpRequestException ex)
+                {
+                    button.Content = $"B³¹d pobierania danych: {ex.Message}";
                 }
             }
         }
+
     }
 }
