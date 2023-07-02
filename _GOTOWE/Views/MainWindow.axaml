@@ -1,0 +1,41 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:AvaloniaApplication2.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="AvaloniaApplication2.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="AvaloniaApplication2"
+		TransparencyLevelHint="AcrylicBlur"
+        Background="Transparent"
+		ExtendClientAreaToDecorationsHint="True">
+	
+	<Grid ShowGridLines="False">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="30"></RowDefinition>
+			<RowDefinition Height="100"></RowDefinition>
+			<RowDefinition Height="500"></RowDefinition>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"></ColumnDefinition>
+			<ColumnDefinition Width="*"></ColumnDefinition>
+		</Grid.ColumnDefinitions>
+
+
+		<StackPanel VerticalAlignment="Center" Grid.Row="1" Grid.Column="0">
+			<TextBox Watermark="Wpisz miejscowość" Name="miejscowosc"/>
+		</StackPanel>
+		<TextBlock Grid.Row="0" Foreground="White" VerticalAlignment="Center" Grid.Column="0" Text=" Weather Baloon"></TextBlock>
+		<Button Foreground="White" Grid.Row="1" Grid.Column="1" Content="Pobierz prognozę pogody" Command="{Binding DoTheThing}"/>
+		<StackPanel Grid.Row="2" Grid.Column="0">
+			<TextBlock Foreground="White" FontSize="25" VerticalAlignment="Center" Padding="30" Text="{Binding WeatherInfo}" />
+			<TextBlock Foreground="White" FontSize="25" VerticalAlignment="Center" Padding="30" Text="{Binding Temperature, StringFormat='Temperatura: {0} C'}" />
+			<TextBlock Foreground="White" FontSize="25" VerticalAlignment="Center" Padding="30" Text="{Binding Cisnienie, StringFormat='Ciśnienie: {0} hPa'}" />
+			<TextBlock Foreground="White" FontSize="25" VerticalAlignment="Center" Padding="30" Text="{Binding Wilgotnosc, StringFormat='Wilgotność: {0}%'}" />
+		</StackPanel>
+		<TextBlock Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="70" Grid.Row="2" Grid.Column="1" Text="{Binding Dzis}"></TextBlock>
+	</Grid>
+	
+</Window>
